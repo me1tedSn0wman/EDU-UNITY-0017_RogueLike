@@ -3,10 +3,18 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
+    private bool m_IsGameOver;
+
     private BoardManager m_Board;
     private Vector2Int m_CellPosition;
 
-    public void Spawn(BoardManager boardManager, Vector2Int cell) { 
+    public void Init()
+    {
+        m_IsGameOver = false;
+    }
+
+    public void Spawn(BoardManager boardManager, Vector2Int cell) {
+        m_IsGameOver = false;
         m_Board = boardManager;
 
         MoveTo(cell);
@@ -18,8 +26,20 @@ public class PlayerController : MonoBehaviour
         transform.position = m_Board.CellToWorld(m_CellPosition);
     }
 
+    public void GameOver() {
+        m_IsGameOver = true;
+    }
+
     private void Update()
     {
+        if (Keyboard.current.enterKey.wasPressedThisFrame && m_IsGameOver)
+        {
+            GameManager.Instance.StartNewGame();
+        }
+
+        if (m_IsGameOver) {
+            return;
+        }
         Vector2Int newCellTarget = m_CellPosition;
         bool hasMoved = false;
 
@@ -44,15 +64,21 @@ public class PlayerController : MonoBehaviour
             hasMoved = true;
         }
 
+
+
         if (hasMoved)
         {
             BoardManager.CellData cellData = m_Board.GetCellData(newCellTarget);
 
             if (cellData != null && cellData.passable) {
                 GameManager.Instance.TurnManager.Tick();
-                MoveTo(newCellTarget);
 
-                if (cellData.containedObject != null) {
+                if (cellData.containedObject == null)
+                {
+                    MoveTo(newCellTarget);
+                }
+                else if (cellData.containedObject.PlayerWantsToEnter()) {
+                    MoveTo(newCellTarget);
                     cellData.containedObject.PlayerEntered();
                 }
             }

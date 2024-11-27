@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2919444055067056022}
   - component: {fileID: 8382819261701405929}
   m_Layer: 0
-  m_Name: WallPrefab
+  m_Name: WallPrefab_03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -44,3 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e18fd3d9ed9880a4787112145b2e9007, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  obstacleTile: {fileID: 11400000, guid: a7582340dcc3d2844b988d49f8ba960b, type: 2}
+  damagedTile: {fileID: 11400000, guid: 06963741588b2574cb618da035f85f18, type: 2}
+  maxHealth: 5
+  health: 0
+  originalTile: {fileID: 0}
